@@ -1,0 +1,280 @@
+@import 'tailwindcss';
+
+/* Dark theme is opt-in via data-theme so it persists independently of the OS. */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+/* ------------------------------------------------------------------ tokens
+   Two themes only: Light (white / near-white) and Midnight (near-black).
+   Solid colours everywhere — gradients are forbidden by the design rule.
+--------------------------------------------------------------------------- */
+:root {
+  color-scheme: light;
+  --bg: #ffffff;
+  --bg-subtle: #fafafa;
+  --surface: #ffffff;
+  --surface-2: #f4f4f5;
+  --surface-3: #ececee;
+  --border: #e4e4e7;
+  --border-strong: #cfcfd4;
+  --text: #121316;
+  --text-muted: #55575f;
+  --text-faint: #8b8d97;
+  --accent: #2f5fd6;
+  --accent-strong: #234bb0;
+  --accent-soft: #e8eefb;
+  --on-accent: #ffffff;
+  --success: #1a7f45;
+  --success-soft: #e4f4ea;
+  --warning: #a8620a;
+  --warning-soft: #fcefd8;
+  --danger: #b3261e;
+  --danger-soft: #fbe5e3;
+  --info: #1f5fbf;
+  --info-soft: #e6eefb;
+  --focus: #2f5fd6;
+  --selection: #dfe7fb;
+  --code-bg: #f4f4f5;
+  --shadow: 0 1px 2px rgba(16, 18, 24, 0.06);
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #0b0d12;
+  --bg-subtle: #0e1117;
+  --surface: #11141b;
+  --surface-2: #171b24;
+  --surface-3: #1e232e;
+  --border: #242a36;
+  --border-strong: #323a49;
+  --text: #e7e9ef;
+  --text-muted: #a2a9b8;
+  --text-faint: #6f778a;
+  --accent: #7d9bff;
+  --accent-strong: #9db3ff;
+  --accent-soft: #182240;
+  --on-accent: #0b0d12;
+  --success: #5fd38a;
+  --success-soft: #12301f;
+  --warning: #f0b84a;
+  --warning-soft: #3a2b0e;
+  --danger: #f2837b;
+  --danger-soft: #3d1815;
+  --info: #7cc4ff;
+  --info-soft: #14283f;
+  --focus: #9db3ff;
+  --selection: #22305a;
+  --code-bg: #171b24;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-subtle: var(--bg-subtle);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-text-faint: var(--text-faint);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-on-accent: var(--on-accent);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-code-bg: var(--code-bg);
+
+  --font-sans: ui-sans-serif, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', 'Segoe UI Mono', Consolas, 'Liberation Mono', Menlo, monospace;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1rem;
+}
+
+/* --------------------------------------------------------------- base */
+html {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+::selection {
+  background: var(--selection);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+a {
+  text-underline-offset: 3px;
+}
+
+code,
+kbd,
+pre,
+.font-mono {
+  font-family: var(--font-mono);
+  font-feature-settings: 'liga' 0;
+}
+
+kbd {
+  display: inline-block;
+  min-width: 1.5em;
+  padding: 0 0.35em;
+  font-size: 0.75em;
+  line-height: 1.6;
+  text-align: center;
+  border: 1px solid var(--border-strong);
+  border-bottom-width: 2px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* -------------------------------------------------------------- utilities */
+.container-x {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 20px;
+}
+@media (min-width: 768px) {
+  .container-x {
+    padding-inline: 32px;
+  }
+}
+
+.hairline {
+  border-color: var(--border);
+}
+
+/* Subtle pulse for "running" indicators; disabled under reduced motion. */
+@keyframes pp-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+.pp-pulse {
+  animation: pp-pulse 1.6s ease-in-out infinite;
+}
+
+.prose-pp h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.01em;
+}
+.prose-pp h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.35rem;
+}
+.prose-pp p,
+.prose-pp li {
+  color: var(--text-muted);
+}
+.prose-pp p {
+  margin: 0.5rem 0;
+}
+.prose-pp ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+  margin: 0.5rem 0;
+}
+.prose-pp ol {
+  list-style: decimal;
+  padding-left: 1.25rem;
+  margin: 0.5rem 0;
+}
+.prose-pp li {
+  margin: 0.2rem 0;
+}
+.prose-pp a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+.prose-pp code {
+  font-size: 0.875em;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0 0.3em;
+}
+.prose-pp pre {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  overflow-x: auto;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  margin: 0.75rem 0;
+}
+.prose-pp pre code {
+  background: none;
+  border: 0;
+  padding: 0;
+}
+.prose-pp table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  margin: 0.75rem 0;
+}
+.prose-pp th,
+.prose-pp td {
+  text-align: left;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+}
+.prose-pp th {
+  color: var(--text);
+  font-weight: 600;
+}
+.prose-pp td {
+  color: var(--text-muted);
+}
