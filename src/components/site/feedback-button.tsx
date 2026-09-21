@@ -11,7 +11,7 @@ export function FeedbackButton() {
     <a
       href={`mailto:${site.feedbackEmail}?subject=${encodeURIComponent('Project Planner feedback')}`}
       className="fixed bottom-4 left-4 z-40 inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-2.5 py-1.5 text-xs font-medium text-text-muted shadow-[var(--shadow)] hover:text-text hover:border-border-strong transition-colors"
-      aria-label="Send feedback by email"
+      aria-label="Send product feedback"
       data-testid="feedback-button"
     >
       <MessageSquare size={13} aria-hidden />

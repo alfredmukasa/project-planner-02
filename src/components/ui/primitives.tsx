@@ -75,7 +75,7 @@ export function Button({
       type={type}
       disabled={disabled}
       aria-describedby={ariaDescribedBy}
-      className={`inline-flex items-center justify-center gap-1.5 rounded-md font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${variantClass[variant]} ${sizeClass[size]} ${className}`}
+      className={`inline-flex items-center justify-center gap-1.5 rounded-md font-medium transition-colors disabled:cursor-not-allowed disabled:bg-surface-2 disabled:text-text-muted disabled:border-border disabled:hover:bg-surface-2 ${variantClass[variant]} ${sizeClass[size]} ${className}`}
     >
       {children}
     </button>

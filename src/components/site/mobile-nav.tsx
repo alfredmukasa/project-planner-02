@@ -3,6 +3,7 @@
 import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useId, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 import { nav } from '@/content/site';
 
@@ -34,25 +35,27 @@ export function MobileNav() {
         aria-label={open ? 'Close menu' : 'Open menu'}
         onClick={() => setOpen((v) => !v)}
         data-testid="mobile-menu-button"
-        className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-border bg-surface text-text-muted hover:text-text"
+        className="relative z-[90] inline-flex h-8 w-8 items-center justify-center rounded-md border border-border bg-surface text-text-muted hover:text-text"
       >
         {open ? <X size={16} aria-hidden /> : <Menu size={16} aria-hidden />}
       </button>
-      {open && (
-        <div id={id} role="dialog" aria-label="Site menu" className="fixed inset-x-0 top-14 bottom-0 z-50 overflow-y-auto border-t border-border bg-bg">
-          <nav aria-label="Primary mobile" className="container-x py-3 flex flex-col gap-0.5">
-            <NavLinks items={nav} vertical onNavigate={() => setOpen(false)} />
-          </nav>
-          <div className="container-x mt-2 flex flex-col gap-2 border-t border-border pt-4 pb-8">
-            <Link href="/login/" onClick={() => setOpen(false)} className="inline-flex h-9 items-center justify-center rounded-md border border-border bg-surface text-sm font-medium">
-              Login
-            </Link>
-            <Link href="/register/" onClick={() => setOpen(false)} className="inline-flex h-9 items-center justify-center rounded-md bg-accent text-sm font-medium text-on-accent">
-              Create Account
-            </Link>
-          </div>
-        </div>
-      )}
+      {open &&
+        createPortal(
+          <div id={id} role="dialog" aria-label="Site menu" className="fixed inset-x-0 top-14 bottom-0 z-[80] overflow-y-auto border-t border-border bg-bg lg:hidden">
+            <nav aria-label="Primary mobile" className="container-x py-3 flex flex-col gap-0.5">
+              <NavLinks items={nav} vertical onNavigate={() => setOpen(false)} />
+            </nav>
+            <div className="container-x mt-2 flex flex-col gap-2 border-t border-border pt-4 pb-8">
+              <Link href="/login/" onClick={() => setOpen(false)} className="inline-flex h-9 items-center justify-center rounded-md border border-border bg-surface text-sm font-medium">
+                Login
+              </Link>
+              <Link href="/register/" onClick={() => setOpen(false)} className="inline-flex h-9 items-center justify-center rounded-md bg-accent text-sm font-medium text-on-accent">
+                Create Account
+              </Link>
+            </div>
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }

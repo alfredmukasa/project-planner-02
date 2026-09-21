@@ -15,7 +15,7 @@ export function LogoMark({ size = 20 }: { size?: number }) {
 
 export function Logo({ compact = false }: { compact?: boolean }) {
   return (
-    <Link href="/" className="inline-flex items-center gap-2 text-text font-semibold tracking-tight" aria-label="Project Planner home">
+    <Link href="/" className="inline-flex shrink-0 items-center gap-2 whitespace-nowrap text-text font-semibold tracking-tight" aria-label="Project Planner home">
       <span className="text-accent">
         <LogoMark />
       </span>

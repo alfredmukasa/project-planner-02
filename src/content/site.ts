@@ -31,14 +31,14 @@ export const site = {
 
 export const nav = [
   { href: '/', label: 'Overview' },
-  { href: '/how-it-works/', label: 'How It Works' },
+  { href: '/how-it-works/', label: 'How it works', compactHide: true },
   { href: '/features/', label: 'Features' },
   { href: '/architecture/', label: 'Architecture' },
-  { href: '/agents/', label: 'AI Agents' },
+  { href: '/agents/', label: 'Agents' },
   { href: '/pricing/', label: 'Pricing' },
-  { href: '/documentation/', label: 'Documentation' },
+  { href: '/documentation/', label: 'Docs' },
   { href: '/download/', label: 'Download' },
-  { href: '/support/', label: 'Support' },
+  { href: '/support/', label: 'Support', compactHide: true },
 ] as const;
 
 export const footerColumns = [

@@ -75,7 +75,7 @@ test.describe('public website', () => {
 
   test('login preview does not authenticate', async ({ page }) => {
     await page.goto('/login/');
-    await page.getByLabel('Email').fill('preview@example.com');
+    await page.getByRole('textbox', { name: 'Email' }).fill('preview@example.com');
     await page.getByLabel('Password').fill('not-a-real-password');
     await page.getByRole('button', { name: 'Sign in' }).click();
     await expect(page.getByTestId('auth-preview-notice')).toContainText('Accounts are not available yet');
@@ -83,9 +83,9 @@ test.describe('public website', () => {
 
   test('feedback form is preview-only', async ({ page }) => {
     await page.goto('/support/#feedback');
-    await page.getByLabel('Name').fill('Ada');
-    await page.getByLabel('Email').fill('ada@example.com');
-    await page.getByLabel('Message').fill('The architecture preview is clear.');
+    await page.getByRole('textbox', { name: 'Name' }).fill('Ada');
+    await page.getByRole('textbox', { name: 'Email' }).fill('ada@example.com');
+    await page.getByRole('textbox', { name: 'Message' }).fill('The architecture preview is clear.');
     await page.getByRole('button', { name: 'Submit feedback' }).click();
     await expect(page.getByTestId('feedback-preview-notice')).toBeVisible();
   });
