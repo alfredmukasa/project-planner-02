@@ -31,7 +31,11 @@ npm run verify       # typecheck + lint + gradient scan + build
 
 ## Deploy to Vercel
 
-The site is static. In the Vercel project:
+The site is static. This repository also has a root `vercel.json` that builds `project-planner-website/` when the Vercel project root is the repo root.
+
+To make preview URLs public, turn off **Deployment Protection → Vercel Authentication** on the Vercel project. Otherwise the preview asks visitors to log in to Vercel.
+
+Optional dashboard settings if you prefer a subdirectory root:
 
 | Setting | Value |
 | --- | --- |
