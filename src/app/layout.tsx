@@ -2,8 +2,10 @@ import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 
 import { FeedbackButton } from '@/components/site/feedback-button';
+import { SidebarProvider } from '@/components/site/sidebar-context';
 import { SiteFooter } from '@/components/site/site-footer';
 import { SiteHeader } from '@/components/site/site-header';
+import { SiteSidebar } from '@/components/site/site-sidebar';
 import { site } from '@/content/site';
 
 import './globals.css';
@@ -38,7 +40,7 @@ export const viewport: Viewport = {
  * Applies the persisted theme before first paint to avoid a flash. Runs inline
  * because it must execute before React hydrates.
  */
-const themeScript = `(function(){try{var t=localStorage.getItem('pp-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();`;
+const themeScript = `(function(){try{var t=localStorage.getItem('pp-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);var s=localStorage.getItem('pp-sidebar');if(s!=='expanded'&&s!=='collapsed')s='expanded';document.documentElement.setAttribute('data-sidebar',s);}catch(e){document.documentElement.setAttribute('data-theme','light');document.documentElement.setAttribute('data-sidebar','expanded');}})();`;
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -53,12 +55,19 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         >
           Skip to content
         </a>
-        <SiteHeader />
-        <main id="main" className="flex-1">
-          {children}
-        </main>
-        <SiteFooter />
-        <FeedbackButton />
+        <SidebarProvider>
+          <SiteHeader />
+          <div className="flex flex-1 min-h-0">
+            <SiteSidebar />
+            <div className="flex min-w-0 flex-1 flex-col">
+              <main id="main" className="flex-1">
+                {children}
+              </main>
+              <SiteFooter />
+            </div>
+          </div>
+          <FeedbackButton />
+        </SidebarProvider>
       </body>
     </html>
   );

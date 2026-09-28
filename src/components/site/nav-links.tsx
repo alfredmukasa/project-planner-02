@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation';
 interface Item {
   readonly href: string;
   readonly label: string;
-  readonly compactHide?: boolean;
 }
 
 const isActive = (pathname: string, href: string): boolean => {
@@ -20,7 +19,6 @@ export function NavLinks({ items, onNavigate, vertical = false }: { items: reado
     <>
       {items.map((item) => {
         const active = isActive(pathname, item.href);
-        const hide = !vertical && item.compactHide ? ' hidden 2xl:inline-flex' : '';
         return (
           <Link
             key={item.href}
@@ -30,7 +28,7 @@ export function NavLinks({ items, onNavigate, vertical = false }: { items: reado
             className={
               vertical
                 ? `block rounded-md px-3 py-2 text-sm font-medium ${active ? 'bg-surface-2 text-text' : 'text-text-muted hover:bg-surface-2 hover:text-text'}`
-                : `inline-flex rounded-md px-2 py-1.5 text-[13px] font-medium whitespace-nowrap transition-colors ${active ? 'bg-surface-2 text-text' : 'text-text-muted hover:text-text hover:bg-surface-2'}${hide}`
+                : `inline-flex rounded-md px-2.5 py-1.5 text-[13px] font-medium whitespace-nowrap transition-colors ${active ? 'bg-surface-2 text-text' : 'text-text-muted hover:text-text hover:bg-surface-2'}`
             }
           >
             {item.label}

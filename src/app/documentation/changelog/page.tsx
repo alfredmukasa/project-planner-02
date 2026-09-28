@@ -13,6 +13,11 @@ export default function ChangelogPage() {
       title="Website changelog"
       description="This log covers the public website only. The Windows application has not been released."
     >
+      <h2>0.1.1 — 28 September 2026</h2>
+      <ul>
+        <li>Top navigation now has four primary items: Overview, Features, Pricing, Download.</li>
+        <li>Remaining destinations moved to a collapsible sidebar: icons when collapsed, icons and labels when expanded.</li>
+      </ul>
       <h2>0.1.0 — 21 September 2026</h2>
       <p>Initial public website.</p>
       <ul>

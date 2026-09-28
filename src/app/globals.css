@@ -170,6 +170,101 @@ kbd {
 }
 
 /* -------------------------------------------------------------- utilities */
+:root {
+  --sidebar-collapsed-w: 3.5rem;
+  --sidebar-expanded-w: 15rem;
+  --sidebar-w: var(--sidebar-expanded-w);
+}
+[data-sidebar='collapsed'] {
+  --sidebar-w: var(--sidebar-collapsed-w);
+}
+
+.site-sidebar-slot,
+.site-sidebar {
+  width: var(--sidebar-w);
+  transition: width 160ms ease;
+}
+
+.sidebar-label,
+.sidebar-heading {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+[data-sidebar='collapsed'] .sidebar-label,
+[data-sidebar='collapsed'] .sidebar-heading {
+  width: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+[data-sidebar='collapsed'] .sidebar-heading {
+  display: none;
+}
+
+[data-sidebar='collapsed'] .sidebar-item {
+  justify-content: center;
+  gap: 0;
+  padding-inline: 0.5rem;
+}
+
+[data-sidebar='collapsed'] .sidebar-expanded-icon {
+  display: none;
+}
+html:not([data-sidebar='collapsed']) .sidebar-collapsed-icon {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  :root,
+  html[data-sidebar='expanded'],
+  html[data-sidebar='collapsed'] {
+    --sidebar-w: var(--sidebar-collapsed-w);
+  }
+  html[data-sidebar='expanded'] .sidebar-label,
+  html[data-sidebar='collapsed'] .sidebar-label,
+  html[data-sidebar='expanded'] .sidebar-heading,
+  html[data-sidebar='collapsed'] .sidebar-heading {
+    width: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+  html[data-sidebar='expanded'] .sidebar-heading,
+  html[data-sidebar='collapsed'] .sidebar-heading {
+    display: none;
+  }
+  html[data-sidebar='expanded'] .sidebar-item,
+  html[data-sidebar='collapsed'] .sidebar-item {
+    justify-content: center;
+    gap: 0;
+    padding-inline: 0.5rem;
+  }
+  .site-sidebar-slot {
+    width: var(--sidebar-collapsed-w);
+  }
+  html[data-sidebar-mobile='open'] .site-sidebar {
+    position: fixed;
+    top: 3.5rem;
+    left: 0;
+    width: min(18rem, 86vw);
+    height: calc(100vh - 3.5rem);
+    box-shadow: var(--shadow);
+  }
+  html[data-sidebar-mobile='open'] .sidebar-label,
+  html[data-sidebar-mobile='open'] .sidebar-heading {
+    display: inline-block;
+    width: auto;
+    opacity: 1;
+    pointer-events: auto;
+  }
+  html[data-sidebar-mobile='open'] .sidebar-item {
+    justify-content: flex-start;
+    gap: 0.75rem;
+    padding-inline: 0.5rem;
+  }
+}
+
 .container-x {
   width: 100%;
   max-width: 1200px;

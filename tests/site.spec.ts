@@ -102,12 +102,40 @@ test.describe('public website', () => {
     await expect(html).toHaveAttribute('data-theme', before ?? 'light');
   });
 
+  test('top bar keeps four primary links', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto('/');
+    const primary = page.getByRole('navigation', { name: 'Primary' });
+    await expect(primary.getByRole('link', { name: 'Overview' })).toBeVisible();
+    await expect(primary.getByRole('link', { name: 'Features' })).toBeVisible();
+    await expect(primary.getByRole('link', { name: 'Pricing' })).toBeVisible();
+    await expect(primary.getByRole('link', { name: 'Download' })).toBeVisible();
+    await expect(primary.getByRole('link')).toHaveCount(4);
+  });
+
+  test('sidebar shows remaining destinations and can collapse to icons', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto('/');
+    const sidebar = page.getByTestId('site-sidebar');
+    await expect(sidebar.getByRole('link', { name: 'Architecture' })).toBeVisible();
+    await expect(sidebar.getByRole('link', { name: 'Agents' })).toBeVisible();
+    await expect(sidebar.getByRole('link', { name: 'Documentation' })).toBeVisible();
+    await page.getByTestId('sidebar-toggle').click();
+    await expect(page.locator('html')).toHaveAttribute('data-sidebar', 'collapsed');
+    await expect(sidebar.getByRole('link', { name: 'Architecture' })).toBeVisible();
+    await page.getByTestId('sidebar-toggle').click();
+    await expect(page.locator('html')).toHaveAttribute('data-sidebar', 'expanded');
+  });
+
   test('mobile navigation opens', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/');
     await page.getByTestId('mobile-menu-button').click();
-    await expect(page.getByRole('dialog', { name: 'Site menu' })).toBeVisible();
-    await page.getByRole('dialog', { name: 'Site menu' }).getByRole('link', { name: 'Pricing' }).click();
+    const menu = page.getByRole('dialog', { name: 'Site menu' });
+    await expect(menu).toBeVisible();
+    await expect(menu.getByRole('link', { name: 'Login' })).toBeVisible();
+    await expect(menu.getByRole('link', { name: 'Create Account' })).toBeVisible();
+    await menu.getByRole('link', { name: 'Pricing' }).click();
     await expect(page).toHaveURL(/\/pricing\//);
   });
 });

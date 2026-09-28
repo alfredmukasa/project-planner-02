@@ -29,17 +29,43 @@ export const site = {
   copyrightYear: 2026,
 } as const;
 
-export const nav = [
-  { href: '/', label: 'Overview' },
-  { href: '/how-it-works/', label: 'How it works', compactHide: true },
-  { href: '/features/', label: 'Features' },
-  { href: '/architecture/', label: 'Architecture' },
-  { href: '/agents/', label: 'Agents' },
-  { href: '/pricing/', label: 'Pricing' },
-  { href: '/documentation/', label: 'Docs' },
-  { href: '/download/', label: 'Download' },
-  { href: '/support/', label: 'Support', compactHide: true },
-] as const;
+export type NavIcon = 'overview' | 'features' | 'pricing' | 'download' | 'how-it-works' | 'architecture' | 'agents' | 'docs' | 'support';
+
+export interface NavItem {
+  href: string;
+  label: string;
+  icon: NavIcon;
+}
+
+/** Top bar: four primary destinations only. */
+export const primaryNav: NavItem[] = [
+  { href: '/', label: 'Overview', icon: 'overview' },
+  { href: '/features/', label: 'Features', icon: 'features' },
+  { href: '/pricing/', label: 'Pricing', icon: 'pricing' },
+  { href: '/download/', label: 'Download', icon: 'download' },
+];
+
+/** Sidebar: remaining destinations, grouped. */
+export const sidebarGroups: { title: string; items: NavItem[] }[] = [
+  {
+    title: 'Explore',
+    items: [
+      { href: '/how-it-works/', label: 'How it works', icon: 'how-it-works' },
+      { href: '/architecture/', label: 'Architecture', icon: 'architecture' },
+      { href: '/agents/', label: 'Agents', icon: 'agents' },
+    ],
+  },
+  {
+    title: 'Resources',
+    items: [
+      { href: '/documentation/', label: 'Documentation', icon: 'docs' },
+      { href: '/support/', label: 'Support', icon: 'support' },
+    ],
+  },
+];
+
+/** All primary + sidebar links. Used by sitemap and any full-list consumers. */
+export const nav: NavItem[] = [...primaryNav, ...sidebarGroups.flatMap((group) => group.items)];
 
 export const footerColumns = [
   {
