@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import { AuthForm, Field } from '@/components/auth/auth-form';
+import { AuthPageShell } from '@/components/auth/auth-page-shell';
 
 export const metadata: Metadata = {
   title: 'Login',
@@ -10,11 +11,11 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
   return (
-    <div className="container-x py-16 md:py-24">
+    <AuthPageShell>
       <AuthForm
         mode="login"
         title="Sign in"
-        description="Use Google, GitHub, or your email and password to access your Project Planner account."
+        description="Use Google, GitHub, or your email and password."
         submitLabel="Sign in"
         footer={
           <>
@@ -32,6 +33,6 @@ export default function LoginPage() {
         <Field id="email" label="Email" type="email" autoComplete="username" placeholder="you@company.com" />
         <Field id="password" label="Password" type="password" autoComplete="current-password" />
       </AuthForm>
-    </div>
+    </AuthPageShell>
   );
 }

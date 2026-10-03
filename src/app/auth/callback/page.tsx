@@ -35,13 +35,24 @@ export default function AuthCallbackPage() {
 
         const supabase = createBrowserSupabaseClient();
 
+        const nextRaw = params.get('next') ?? '';
+        const type = params.get('type') ?? '';
+        const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+        const hashType = hashParams.get('type') ?? '';
+        const isRecovery =
+          type === 'recovery' ||
+          hashType === 'recovery' ||
+          nextRaw === '/reset-password/' ||
+          nextRaw === '/reset-password';
+        const destination = isRecovery ? '/reset-password/' : '/account/';
+
         if (code) {
           const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
           if (exchangeError) {
             // If a previous attempt already created a session, continue.
             const { data: existing } = await supabase.auth.getSession();
             if (existing.session) {
-              router.replace('/account/');
+              router.replace(destination);
               return;
             }
             if (!cancelled) {
@@ -54,7 +65,7 @@ export default function AuthCallbackPage() {
             }
             return;
           }
-          router.replace('/account/');
+          router.replace(destination);
           return;
         }
 
@@ -64,7 +75,7 @@ export default function AuthCallbackPage() {
           return;
         }
         if (data.session) {
-          router.replace('/account/');
+          router.replace(destination);
           return;
         }
         if (!cancelled) setError('No authentication code was returned. Try signing in again.');

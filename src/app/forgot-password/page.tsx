@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import { AuthForm, Field } from '@/components/auth/auth-form';
+import { AuthPageShell } from '@/components/auth/auth-page-shell';
 
 export const metadata: Metadata = {
   title: 'Forgot password',
@@ -10,11 +11,11 @@ export const metadata: Metadata = {
 
 export default function ForgotPasswordPage() {
   return (
-    <div className="container-x py-16 md:py-24">
+    <AuthPageShell>
       <AuthForm
         mode="forgot"
         title="Reset password"
-        description="Enter the email for your account and we will send a reset link if it exists."
+        description="Enter your account email. If it exists, we will send a reset link."
         submitLabel="Send reset link"
         footer={
           <>
@@ -27,6 +28,6 @@ export default function ForgotPasswordPage() {
       >
         <Field id="email" label="Email" type="email" autoComplete="email" placeholder="you@company.com" />
       </AuthForm>
-    </div>
+    </AuthPageShell>
   );
 }

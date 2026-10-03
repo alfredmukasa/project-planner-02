@@ -1,41 +1,22 @@
 # Supabase Auth setup (email + Google + GitHub)
 
-Apply the users-only migration, then enable OAuth providers and redirect URLs in the Supabase Dashboard for project `shbumfpebjfxzvehwrec`.
+Apply the users-only migration (if not already applied), then enable OAuth providers and redirect URLs in the Supabase Dashboard for project `shbumfpebjfxzvehwrec`.
 
 ## 1. Apply users schema
 
-In **SQL Editor**, paste and run:
+In **SQL Editor**, paste and run (only if tables are missing):
 
 `supabase/migrations/20261002230409_users_auth_schema.sql`
 
-Or, after CLI login/link:
+Phase 1 security hardening (search_path + revoke `rls_auto_enable`):
 
-```bash
-npx supabase db push --linked
-```
-
-Creates: `users`, `user_auth_identities`, `user_profiles`, `user_onboarding`, public views, RLS, and signup triggers on `auth.users`.
-
-If Auth users already exist (created before the migration), backfill once:
-
-```sql
-INSERT INTO public.users (id, primary_email, email_verified_at, status)
-SELECT id, email, email_confirmed_at,
-  CASE WHEN email_confirmed_at IS NULL THEN 'pending_verification' ELSE 'active' END
-FROM auth.users
-ON CONFLICT (id) DO NOTHING;
-
--- Then create matching profiles/identities/onboarding rows as needed, or re-register test accounts.
-```
+`supabase/migrations/20261003010000_phase1_auth_security.sql`
 
 ## 2. Redirect URLs
 
 **Authentication → URL configuration**
 
 These must match the app **exactly** (scheme, host, port, and trailing slash).
-The site uses Next.js `trailingSlash: true`, and OAuth `redirectTo` is:
-
-`{origin}/auth/callback/`
 
 Site URL (local):
 
@@ -47,77 +28,73 @@ Additional Redirect URLs:
 
 ```text
 http://localhost:3000/auth/callback/
+http://localhost:3000/reset-password/
 http://localhost:3000/account/
 ```
 
-If `next dev` binds to another port (e.g. `3001` when `3000` is busy), either free
-port `3000` or also add that origin’s callback URL:
+For each Vercel preview or production origin, add the same three paths, for example:
 
 ```text
-http://localhost:3001/auth/callback/
+https://<your-deployment>.vercel.app/auth/callback/
+https://<your-deployment>.vercel.app/reset-password/
+https://<your-deployment>.vercel.app/account/
 ```
 
-PKCE stores the code verifier in **this browser’s cookies for that origin**. Starting
-OAuth on `:3001` and landing on `:3000` (or another device/browser) will fail with
-“PKCE code verifier not found”.
+Also set Vercel env `NEXT_PUBLIC_SITE_URL` to that origin for the matching environment.
 
-Add your production origin the same way when you deploy (e.g. `https://your-domain/auth/callback/`).
+**Status (2026-10-02 audit):** Vercel currently has `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` for preview/production/development. `NEXT_PUBLIC_SITE_URL` is still **missing** on Vercel — add it per environment (production origin and, when using fixed preview URLs, that preview origin). Browser OAuth/forgot flows use `window.location.origin` when available; `NEXT_PUBLIC_SITE_URL` matters for email redirect fallbacks at build/SSR time.
 
-## 3. Google (Gmail) provider
+PKCE stores the code verifier in **this browser’s cookies for that origin**. Starting OAuth on `:3001` and landing on `:3000` fails with “PKCE code verifier not found”.
 
-1. **Authentication → Providers → Google** → Enable
-2. Create OAuth credentials in [Google Cloud Console](https://console.cloud.google.com/apis/credentials)
-   - Application type: Web application
-   - Authorized redirect URI (Supabase callback):
+## 3. Google provider (required for Google sign-in)
+
+Google failures are almost always **Dashboard configuration**, not missing app code.
+
+1. **Authentication → Providers → Google** → Enable  
+2. [Google Cloud Console](https://console.cloud.google.com/apis/credentials) → OAuth Web client  
+   - Authorized JavaScript origins: `http://localhost:3000` and your Vercel origin  
+   - Authorized redirect URI (Supabase only):
 
 ```text
 https://shbumfpebjfxzvehwrec.supabase.co/auth/v1/callback
 ```
 
-3. Paste Client ID and Client Secret into the Supabase Google provider settings
-4. Save
+3. Paste **Client ID** and **Client Secret** into Supabase Google provider settings (never into the Next.js repo).  
+4. Save and retry **Continue with Google** from `http://localhost:3000/login/`.
 
 ## 4. GitHub provider
 
-1. **Authentication → Providers → GitHub** → Enable
-2. Create an OAuth App at [GitHub Developer Settings](https://github.com/settings/developers)
-   - Homepage URL: `http://localhost:3000` (or your production URL)
-   - Authorization callback URL:
+1. **Authentication → Providers → GitHub** → Enable  
+2. GitHub OAuth App: Homepage `http://localhost:3000` (or production); Callback:
 
 ```text
 https://shbumfpebjfxzvehwrec.supabase.co/auth/v1/callback
 ```
 
-3. Paste Client ID and Client Secret into the Supabase GitHub provider settings
-4. Save
+3. Paste Client ID/Secret into Supabase GitHub settings.
 
-## 5. Email confirmation (local testing) — required to avoid rate limits
+## 5. Email confirmation (local testing)
 
-Hosted Supabase enforces a low **email send rate limit**. Repeated signups with
-**Confirm email** enabled quickly return `email rate limit exceeded`.
+Hosted Supabase rate-limits confirmation emails. For local testing:
 
-**Authentication → Providers → Email** (project `shbumfpebjfxzvehwrec`):
+**Authentication → Providers → Email** → **Confirm email OFF** → Save.
 
-1. Turn **Confirm email** **OFF** while developing locally.
-2. Save. New `signUp` calls should return a session immediately (no confirmation email).
-3. Turn it back **ON** before production if you want verified emails.
+Turn back ON before production if you require verified emails.
 
-Alternatives while confirmation stays enabled:
+Password recovery emails also count toward email rate limits.
 
-- Wait ~1 hour after the rate-limit error, then try once.
-- Use **Continue with Google** / **Continue with GitHub** (no confirmation email).
+## 6. Leaked-password protection (Dashboard)
 
-## 6. App env (already gitignored)
+Supabase advisor may report leaked-password protection disabled. Enable under Auth password security in the Dashboard when ready (not configurable via SQL migrations).
 
-`project-planner-website/.env.local`:
+## 7. App env (gitignored)
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://shbumfpebjfxzvehwrec.supabase.co
-# Prefer the legacy JWT anon key from Project Settings → API (anon / public).
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.…
-# Optional fallback (new publishable key). Client prefers a JWT-shaped anon key.
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_…
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ…   # JWT anon from Project Settings → API
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
-Never commit service-role / secret keys. Restart `npm run dev` after changing env.
+Never commit service-role / OAuth secrets. Restart `npm run dev` after changing env.
+
+See also `AUTH_ARCHITECTURE.md`.

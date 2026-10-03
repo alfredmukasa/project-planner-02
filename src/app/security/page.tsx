@@ -20,7 +20,7 @@ const practices = [
   },
   {
     title: 'Local by default',
-    body: 'Project data lives in the project folder you choose. The public website has no backend and collects no project content. Optional account features planned for later are specified to store the minimum needed for licence checks.',
+    body: 'Desktop project data is specified to live in the project folder you choose. This website does not collect project files or AI prompts. Website accounts use Supabase Auth and store only account-related profile data needed for sign-in; they are not a substitute for local project storage.',
   },
   {
     title: 'Audits with evidence',
@@ -42,9 +42,15 @@ export default function SecurityPage() {
       <PageHero
         eyebrow="Security"
         title="Designed so secrets, permissions and evidence are explicit"
-        description="The practices below describe the planned Windows application. This website is static HTML and does not process project data, credentials or payments."
+        description="Practices below cover the planned Windows application and, where noted, website account authentication. This site does not process desktop project data or payments."
       />
       <Section>
+        <div className="mb-8 rounded-lg border border-border bg-surface p-5">
+          <h2 className="font-semibold">Website authentication</h2>
+          <p className="mt-2 text-sm text-text-muted">
+            Sign-in uses Supabase Auth with PKCE. Passwords are handled by Supabase, not stored in application tables. OAuth (Google/GitHub) uses provider redirects through Supabase. Session tokens are kept in the browser. Row Level Security applies to user profile tables in the database. Billing and desktop licence checks are not enabled yet.
+          </p>
+        </div>
         <div className="grid gap-4 md:grid-cols-2">
           {practices.map((p) => (
             <article key={p.title} className="rounded-lg border border-border bg-surface p-5">

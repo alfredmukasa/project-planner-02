@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState, type FormEvent, type ReactNode } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useState, type FormEvent, type ReactNode } from 'react';
 
 import { OAuthButtons } from '@/components/auth/oauth-buttons';
 import { Button } from '@/components/ui/primitives';
@@ -41,7 +41,7 @@ export function Field({
         required={required}
         placeholder={placeholder}
         minLength={minLength}
-        className="mt-1.5 h-9 w-full rounded-md border border-border bg-bg px-3 text-sm text-text placeholder:text-text-faint hover:border-border-strong focus:border-accent"
+        className="mt-1 h-9 w-full rounded-md border border-border bg-bg px-3 text-sm text-text placeholder:text-text-faint hover:border-border-strong focus:border-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
       />
     </div>
   );
@@ -68,17 +68,14 @@ function StatusBox({
         : 'border-border bg-surface-2';
 
   return (
-    <div role="status" className={`mt-6 rounded-md border p-4 text-sm ${toneClass}`} data-testid={testId}>
+    <div role="status" className={`mt-4 rounded-md border p-3 text-sm ${toneClass}`} data-testid={testId}>
       <p className="font-semibold text-text">{title}</p>
-      <div className="mt-1.5 text-text-muted">{children}</div>
+      <div className="mt-1 text-text-muted">{children}</div>
     </div>
   );
 }
 
-/**
- * Authentication form wired to Supabase Auth (email/password + OAuth).
- */
-export function AuthForm({
+function AuthFormInner({
   mode,
   title,
   description,
@@ -94,9 +91,11 @@ export function AuthForm({
   footer: ReactNode;
 }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
+  const resetNotice = mode === 'login' && searchParams.get('reset') === '1';
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -153,13 +152,13 @@ export function AuthForm({
       }
 
       const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: getAuthRedirectUrl('/login/'),
+        redirectTo: getAuthRedirectUrl('/reset-password/'),
       });
       if (resetError) {
         setError(friendlyAuthError(resetError));
         return;
       }
-      setInfo('If an account exists for that email, a reset link has been sent.');
+      setInfo('If an account exists for that email, a reset link has been sent. Open it on this device to choose a new password.');
     } catch (err) {
       setError(friendlyAuthError(err));
     } finally {
@@ -168,14 +167,20 @@ export function AuthForm({
   };
 
   return (
-    <div className="mx-auto w-full max-w-md">
-      <div className="rounded-lg border border-border bg-surface p-6 md:p-8">
+    <div className="mx-auto w-full max-w-sm">
+      <div className="rounded-lg border border-border bg-surface p-5 md:p-6">
         <p className="text-xs font-semibold uppercase tracking-wide text-accent">Account</p>
-        <h1 className="mt-2 text-2xl font-semibold tracking-tight">{title}</h1>
-        <p className="mt-2 text-sm text-text-muted">{description}</p>
+        <h1 className="mt-1.5 text-xl font-semibold tracking-tight">{title}</h1>
+        <p className="mt-1.5 text-sm text-text-muted">{description}</p>
+
+        {resetNotice ? (
+          <StatusBox tone="ok" title="Password updated" testId="auth-reset-ok">
+            <p>Sign in with your new password.</p>
+          </StatusBox>
+        ) : null}
 
         {mode !== 'forgot' && (
-          <div className="mt-6 space-y-4">
+          <div className="mt-4 space-y-3">
             <OAuthButtons
               disabled={busy}
               onError={(message) => {
@@ -203,12 +208,12 @@ export function AuthForm({
         {info ? (
           <StatusBox tone="info" title="Check your email" testId="auth-info">
             <p>{info}</p>
-            <Link href="/" className="mt-3 inline-block text-sm font-medium text-accent hover:underline">
-              Return to the overview
+            <Link href="/login/" className="mt-2 inline-block text-sm font-medium text-accent hover:underline">
+              Back to sign in
             </Link>
           </StatusBox>
         ) : (
-          <form onSubmit={onSubmit} className="mt-6 space-y-4" data-testid="auth-form">
+          <form onSubmit={onSubmit} className="mt-4 space-y-3" data-testid="auth-form">
             {children}
             <Button type="submit" className="w-full" size="lg" disabled={busy}>
               {busy ? 'Please wait…' : submitLabel}
@@ -222,7 +227,25 @@ export function AuthForm({
           </form>
         )}
       </div>
-      <p className="mt-4 text-center text-sm text-text-muted">{footer}</p>
+      <p className="mt-3 text-center text-sm text-text-muted">{footer}</p>
     </div>
+  );
+}
+
+/**
+ * Authentication form wired to Supabase Auth (email/password + OAuth).
+ */
+export function AuthForm(props: {
+  mode: AuthMode;
+  title: string;
+  description: string;
+  submitLabel: string;
+  children: ReactNode;
+  footer: ReactNode;
+}) {
+  return (
+    <Suspense fallback={<div className="mx-auto h-64 w-full max-w-sm animate-pulse rounded-lg border border-border bg-surface" />}>
+      <AuthFormInner {...props} />
+    </Suspense>
   );
 }

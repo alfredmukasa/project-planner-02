@@ -13,6 +13,13 @@ export default function ChangelogPage() {
       title="Website changelog"
       description="This log covers the public website only. The Windows application has not been released."
     >
+      <h2>0.2.0 — 2 October 2026</h2>
+      <ul>
+        <li>Supabase Auth on the website: email/password, Google and GitHub OAuth, PKCE callback.</li>
+        <li>Password recovery completes on <code>/reset-password/</code>.</li>
+        <li>Compact authentication layouts; Privacy, Terms, Security and Support FAQ updated for live accounts.</li>
+        <li>Minimal <code>/account/</code> session page (sign-out). Full dashboard/profile still not shipped.</li>
+      </ul>
       <h2>0.1.1 — 28 September 2026</h2>
       <ul>
         <li>Top navigation now has four primary items: Overview, Features, Pricing, Download.</li>
@@ -23,7 +30,7 @@ export default function ChangelogPage() {
       <ul>
         <li>Product overview, how it works, features, architecture, agents, pricing, download, support, about, security, privacy, terms.</li>
         <li>Documentation hub and guides for getting started, identity, workspace, architecture, agents, development, export and keyboard shortcuts.</li>
-        <li>Login, create account and forgot-password screens as non-functional preview UI.</li>
+        <li>Login, create account and forgot-password screens (later wired to Supabase in 0.2.0).</li>
         <li>Light and Midnight themes. No gradients.</li>
         <li>Interface previews rendered from a single demo project (Atlas Field Service), labelled as preview content.</li>
         <li>Download page shows the Windows application as coming soon. No installer is published.</li>
@@ -32,7 +39,7 @@ export default function ChangelogPage() {
       <h2>Deliberately not included</h2>
       <ul>
         <li>Desktop application, installer or auto-update.</li>
-        <li>Backend, database, authentication service or billing.</li>
+        <li>Full dashboard, profile editor, onboarding UI, billing checkout.</li>
         <li>Live AI agents, MCP execution, terminal, Git or local filesystem access.</li>
       </ul>
     </DocsLayout>

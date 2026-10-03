@@ -26,6 +26,7 @@ const routes = [
   '/login/',
   '/register/',
   '/forgot-password/',
+  '/reset-password/',
   '/account/',
   '/auth/callback/',
 ];
@@ -90,6 +91,28 @@ test.describe('public website', () => {
     await page.goto('/register/');
     await expect(page.getByRole('button', { name: 'Continue with Google' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Continue with GitHub' })).toBeVisible();
+  });
+
+  test('reset-password page requires a recovery session', async ({ page }) => {
+    await page.goto('/reset-password/');
+    await expect(page.getByRole('heading', { name: 'Set a new password' })).toBeVisible();
+    await expect(page.getByTestId('reset-missing')).toBeVisible();
+    await expect(page.getByRole('link', { name: /new reset link/i })).toBeVisible();
+  });
+
+  test('privacy and terms mention live website authentication', async ({ page }) => {
+    await page.goto('/privacy/');
+    await expect(page.getByText('Supabase Auth', { exact: true }).first()).toBeVisible();
+    await expect(page.getByText(/Password-reset emails/i)).toBeVisible();
+    await page.goto('/terms/');
+    await expect(page.getByText(/Supabase Auth/i)).toBeVisible();
+  });
+
+  test('support FAQ describes live website accounts', async ({ page }) => {
+    await page.goto('/support/');
+    await expect(page.getByText('Do I need an account?')).toBeVisible();
+    await expect(page.getByText(/Website accounts use Supabase Auth/i)).toBeVisible();
+    await expect(page.getByText(/does not create an account/i)).toHaveCount(0);
   });
 
   test('feedback form is preview-only', async ({ page }) => {

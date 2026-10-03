@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 const faqs = [
   ['Is Project Planner available to download?', 'Not yet. The Download page lists the Windows application as coming soon. There is no installer, checksum or release note until a preview build is published.'],
   ['Does this website run the application?', 'No. This is a static marketing and documentation site. Interface previews are rendered from demo project content and labelled as such.'],
-  ['Do I need an account?', 'Accounts are not available during this website preview. Login and Create Account screens exist so you can see the planned flow; submitting them does not create an account.'],
+  ['Do I need an account?', 'Website accounts use Supabase Auth (email/password, Google, or GitHub). Use Login or Create account. /account/ is a signed-in stub (sign-out only); full dashboard/profile is not shipped yet. The Windows app is Coming soon and does not require a website account today.'],
   ['Will my project leave my machine?', 'The desktop application is designed to store projects locally. Optional account features later (licence checks) are specified to collect the minimum necessary. See Privacy.'],
   ['Which AI providers will be supported?', 'OpenAI, Anthropic, Google Gemini, DeepSeek and compatible endpoints, using your own keys. Project Planner does not resell model usage.'],
   ['What does it cost?', 'Free, Builder $5, Pro $15 and Studio $20 per month. Billing is not open. See Pricing.'],

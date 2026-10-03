@@ -1,16 +1,25 @@
 # Project Planner website
 
-Public marketing and documentation site for **Project Planner**, an upcoming AI-powered planning workspace for Windows.
+Public marketing, documentation, and **website account authentication** for **Project Planner**, an upcoming AI-powered planning workspace for Windows.
 
-This directory is the whole product for now. It is a static site. It does not include a desktop application, backend, database, authentication service, billing, AI agents, MCP execution, local filesystem access, a terminal or Git integration.
+This directory is the website product for now. It does **not** include the Windows desktop application, billing checkout, AI agent execution, MCP tools, local filesystem access, a terminal, or Git integration.
 
-Interface screens on the site are **previews** rendered from a demo project (`Atlas Field Service`). They are labelled as preview / demo content.
+Interface screens on marketing pages are **previews** rendered from a demo project (`Atlas Field Service`). They are labelled as preview / demo content.
+
+## What is live
+
+- Static Next.js marketing/docs site (`output: 'export'`)
+- Supabase Auth: email/password, Google OAuth, GitHub OAuth
+- Password recovery → `/reset-password/`
+- Minimal `/account/` session page (sign-out). Full dashboard/profile is **not** in this phase.
+- Users-only schema in Supabase (`users`, `user_auth_identities`, `user_profiles`, `user_onboarding`) with RLS
 
 ## Stack
 
 - Next.js (App Router) with `output: 'export'`
 - React 19 and TypeScript
 - Tailwind CSS v4
+- `@supabase/ssr` + `@supabase/supabase-js` (browser client, cookie PKCE)
 - Two themes only: Light and Midnight (`data-theme`)
 - No gradients (enforced by `npm run check:gradients`)
 
@@ -29,34 +38,31 @@ npm run test:e2e     # Playwright, requires a prior build
 npm run verify       # typecheck + lint + gradient scan + build
 ```
 
+## Environment
+
+See `supabase/OAUTH_SETUP.md` and `.env.local` (gitignored):
+
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` (prefer JWT anon key)
+- `NEXT_PUBLIC_SITE_URL` (e.g. `http://localhost:3000` or your deployment origin)
+
+Never commit service-role keys or OAuth client secrets.
+
 ## Deploy to Vercel
 
-The site is static. This repository also has a root `vercel.json` that builds `project-planner-website/` when the Vercel project root is the repo root.
+Root `vercel.json` builds `project-planner-website/`. Set the same `NEXT_PUBLIC_*` vars for Preview and Production.
 
 To make preview URLs public, turn off **Deployment Protection → Vercel Authentication** on the Vercel project. Otherwise the preview asks visitors to log in to Vercel.
 
-Optional dashboard settings if you prefer a subdirectory root:
-
-| Setting | Value |
-| --- | --- |
-| Root Directory | `project-planner-website` |
-| Framework | Next.js (or Other) |
-| Build command | `npm run build` |
-| Output directory | `out` |
-
-Or from the CLI, from this folder:
-
-```bash
-npx vercel --yes
-```
-
-Any other static host (Netlify, GitHub Pages, S3, `npx serve out`) works the same way: publish the `out/` directory.
+Add each deployment origin’s `/auth/callback/` and `/reset-password/` to Supabase **Redirect URLs**.
 
 ## Pages
 
-Overview, How it works, Features, Architecture, AI Agents, Documentation (and guides), Pricing, Download, Support (FAQ, contact, feedback), About, Security, Privacy, Terms, Login, Create account, Forgot password.
+Marketing: Overview, How it works, Features, Architecture, AI Agents, Documentation, Pricing, Download, Support, About, Security, Privacy, Terms.
 
-Pricing: **Free**, **Builder $5**, **Pro $15**, **Studio $20**. Billing is not available; plan buttons are disabled.
+Auth: Login, Create account, Forgot password, Reset password, Auth callback, Account (stub).
+
+Pricing: **Free**, **Builder $5**, **Pro $15**, **Studio $20**. Billing checkout is not available; plan buttons are disabled.
 
 Download: Windows application is **Coming soon**. There is no installer.
 
@@ -64,6 +70,8 @@ Download: Windows application is **Coming soon**. There is no installer.
 
 Foglamp-inspired developer-tool density: compact header, grouped information, structured panels, original Project Planner mark and colour. Light (white) and Midnight (near-black) only. Solid colour, no gradients.
 
-## Isolation
+## Docs
 
-All website source lives in `project-planner-website/`. It does not import or modify `PROJECT_PLANNER_AUDIT/`, `PROJECT_PLANNER_DOCS/` or any other project in this repository.
+- `supabase/OAUTH_SETUP.md` — providers and redirects
+- `supabase/AUTH_ARCHITECTURE.md` — actual auth flows
+- `PROJECT_PLANNER_DOCS/` (repo root) — product specification (not all implemented)

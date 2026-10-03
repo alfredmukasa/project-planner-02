@@ -6,7 +6,17 @@ import { nav, site } from '@/content/site';
 export const dynamic = 'force-static';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const extra = ['/about/', '/security/', '/privacy/', '/terms/', '/login/', '/register/', '/forgot-password/', '/account/'];
+  const extra = [
+    '/about/',
+    '/security/',
+    '/privacy/',
+    '/terms/',
+    '/login/',
+    '/register/',
+    '/forgot-password/',
+    '/reset-password/',
+    '/account/',
+  ];
   const paths = new Set<string>([...nav.map((n) => n.href), ...docsIndex.map((d) => d.href), ...extra]);
   const lastModified = new Date('2026-09-21');
   return [...paths].map((path) => ({

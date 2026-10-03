@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import { AuthForm, Field } from '@/components/auth/auth-form';
+import { AuthPageShell } from '@/components/auth/auth-page-shell';
 
 export const metadata: Metadata = {
   title: 'Create account',
@@ -10,11 +11,11 @@ export const metadata: Metadata = {
 
 export default function RegisterPage() {
   return (
-    <div className="container-x py-16 md:py-24">
+    <AuthPageShell>
       <AuthForm
         mode="register"
         title="Create account"
-        description="Continue with Google or GitHub, or register with email. Passwords must be at least 12 characters."
+        description="Continue with Google or GitHub, or register with email (password ≥ 12 characters)."
         submitLabel="Create account"
         footer={
           <>
@@ -47,6 +48,6 @@ export default function RegisterPage() {
           .
         </p>
       </AuthForm>
-    </div>
+    </AuthPageShell>
   );
 }
