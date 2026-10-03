@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+import { resolvePostAuthPath } from '@/lib/auth/post-auth';
 import { friendlyAuthError } from '@/lib/supabase/auth-errors';
 import { createBrowserSupabaseClient } from '@/lib/supabase/client';
 
@@ -44,7 +45,14 @@ export default function AuthCallbackPage() {
           hashType === 'recovery' ||
           nextRaw === '/reset-password/' ||
           nextRaw === '/reset-password';
-        const destination = isRecovery ? '/reset-password/' : '/account/';
+
+        const goNext = async () => {
+          if (isRecovery) {
+            router.replace('/reset-password/');
+            return;
+          }
+          router.replace(await resolvePostAuthPath(supabase));
+        };
 
         if (code) {
           const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
@@ -52,7 +60,7 @@ export default function AuthCallbackPage() {
             // If a previous attempt already created a session, continue.
             const { data: existing } = await supabase.auth.getSession();
             if (existing.session) {
-              router.replace(destination);
+              await goNext();
               return;
             }
             if (!cancelled) {
@@ -65,7 +73,7 @@ export default function AuthCallbackPage() {
             }
             return;
           }
-          router.replace(destination);
+          await goNext();
           return;
         }
 
@@ -75,7 +83,7 @@ export default function AuthCallbackPage() {
           return;
         }
         if (data.session) {
-          router.replace(destination);
+          await goNext();
           return;
         }
         if (!cancelled) setError('No authentication code was returned. Try signing in again.');

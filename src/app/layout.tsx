@@ -1,11 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 
-import { FeedbackButton } from '@/components/site/feedback-button';
-import { SidebarProvider } from '@/components/site/sidebar-context';
-import { SiteFooter } from '@/components/site/site-footer';
-import { SiteHeader } from '@/components/site/site-header';
-import { SiteSidebar } from '@/components/site/site-sidebar';
+import { RootChrome } from '@/components/site/root-chrome';
 import { site } from '@/content/site';
 
 import './globals.css';
@@ -55,19 +51,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         >
           Skip to content
         </a>
-        <SidebarProvider>
-          <SiteHeader />
-          <div className="flex flex-1 min-h-0">
-            <SiteSidebar />
-            <div className="flex min-w-0 flex-1 flex-col">
-              <main id="main" className="flex-1">
-                {children}
-              </main>
-              <SiteFooter />
-            </div>
-          </div>
-          <FeedbackButton />
-        </SidebarProvider>
+        <RootChrome>{children}</RootChrome>
       </body>
     </html>
   );

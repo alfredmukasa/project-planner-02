@@ -1,7 +1,6 @@
-import Link from 'next/link';
-
 import { primaryNav, site } from '@/content/site';
 
+import { AuthHeaderActions } from './auth-header-actions';
 import { Logo } from './logo';
 import { NavLinks } from './nav-links';
 import { SidebarMenuButton } from './site-sidebar';
@@ -21,18 +20,7 @@ export function SiteHeader() {
         </nav>
         <div className="ml-auto flex shrink-0 items-center gap-2">
           <ThemeToggle />
-          <Link
-            href="/login/"
-            className="hidden md:inline-flex h-8 items-center rounded-md border border-border bg-surface px-3 text-sm font-medium text-text hover:border-border-strong transition-colors"
-          >
-            Login
-          </Link>
-          <Link
-            href="/register/"
-            className="hidden md:inline-flex h-8 items-center rounded-md bg-accent px-3 text-sm font-medium text-on-accent hover:bg-accent-strong transition-colors"
-          >
-            Create Account
-          </Link>
+          <AuthHeaderActions />
         </div>
       </div>
     </header>

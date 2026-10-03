@@ -30,14 +30,18 @@ Additional Redirect URLs:
 http://localhost:3000/auth/callback/
 http://localhost:3000/reset-password/
 http://localhost:3000/account/
+http://localhost:3000/dashboard/
+http://localhost:3000/onboarding/
 ```
 
-For each Vercel preview or production origin, add the same three paths, for example:
+For each Vercel preview or production origin, add the same paths, for example:
 
 ```text
 https://<your-deployment>.vercel.app/auth/callback/
 https://<your-deployment>.vercel.app/reset-password/
 https://<your-deployment>.vercel.app/account/
+https://<your-deployment>.vercel.app/dashboard/
+https://<your-deployment>.vercel.app/onboarding/
 ```
 
 Also set Vercel env `NEXT_PUBLIC_SITE_URL` to that origin for the matching environment.

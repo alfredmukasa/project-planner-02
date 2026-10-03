@@ -6,6 +6,8 @@ import { Suspense, useState, type FormEvent, type ReactNode } from 'react';
 
 import { OAuthButtons } from '@/components/auth/oauth-buttons';
 import { Button } from '@/components/ui/primitives';
+import { isSafeNextPath } from '@/lib/auth/paths';
+import { resolvePostAuthPath } from '@/lib/auth/post-auth';
 import { friendlyAuthError } from '@/lib/supabase/auth-errors';
 import { createBrowserSupabaseClient } from '@/lib/supabase/client';
 import { getAuthRedirectUrl } from '@/lib/supabase/env';
@@ -117,7 +119,12 @@ function AuthFormInner({
           setError(friendlyAuthError(signInError));
           return;
         }
-        router.push('/account/');
+        const nextParam = searchParams.get('next');
+        if (isSafeNextPath(nextParam)) {
+          router.push(nextParam);
+          return;
+        }
+        router.push(await resolvePostAuthPath(supabase));
         return;
       }
 
@@ -134,7 +141,7 @@ function AuthFormInner({
               display_name: name || undefined,
               full_name: name || undefined,
             },
-            emailRedirectTo: getAuthRedirectUrl('/account/'),
+            emailRedirectTo: getAuthRedirectUrl('/auth/callback/'),
           },
         });
         if (signUpError) {
@@ -147,7 +154,7 @@ function AuthFormInner({
           );
           return;
         }
-        router.push('/account/');
+        router.push(await resolvePostAuthPath(supabase));
         return;
       }
 

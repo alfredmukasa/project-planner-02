@@ -11,8 +11,10 @@ Interface screens on marketing pages are **previews** rendered from a demo proje
 - Static Next.js marketing/docs site (`output: 'export'`)
 - Supabase Auth: email/password, Google OAuth, GitHub OAuth
 - Password recovery → `/reset-password/`
-- Minimal `/account/` session page (sign-out). Full dashboard/profile is **not** in this phase.
+- Authenticated foundation: `/dashboard/`, `/account/` (profile + identities), `/onboarding/` (complete/skip)
+- Client auth gate (no middleware — unsupported with static export)
 - Users-only schema in Supabase (`users`, `user_auth_identities`, `user_profiles`, `user_onboarding`) with RLS
+- Projects / agents / billing / desktop are **not** in this phase
 
 ## Stack
 
@@ -54,13 +56,13 @@ Root `vercel.json` builds `project-planner-website/`. Set the same `NEXT_PUBLIC_
 
 To make preview URLs public, turn off **Deployment Protection → Vercel Authentication** on the Vercel project. Otherwise the preview asks visitors to log in to Vercel.
 
-Add each deployment origin’s `/auth/callback/` and `/reset-password/` to Supabase **Redirect URLs**.
+Add each deployment origin’s `/auth/callback/`, `/reset-password/`, `/dashboard/`, `/onboarding/`, and `/account/` to Supabase **Redirect URLs**.
 
 ## Pages
 
 Marketing: Overview, How it works, Features, Architecture, AI Agents, Documentation, Pricing, Download, Support, About, Security, Privacy, Terms.
 
-Auth: Login, Create account, Forgot password, Reset password, Auth callback, Account (stub).
+Auth / app: Login, Create account, Forgot password, Reset password, Auth callback, Onboarding, Dashboard, Account.
 
 Pricing: **Free**, **Builder $5**, **Pro $15**, **Studio $20**. Billing checkout is not available; plan buttons are disabled.
 

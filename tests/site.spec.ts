@@ -28,8 +28,12 @@ const routes = [
   '/forgot-password/',
   '/reset-password/',
   '/account/',
+  '/dashboard/',
+  '/onboarding/',
   '/auth/callback/',
 ];
+
+const gatedRoutes = new Set(['/account/', '/dashboard/', '/onboarding/']);
 
 async function collectConsoleErrors(page: Page): Promise<string[]> {
   const errors: string[] = [];
@@ -49,6 +53,10 @@ test.describe('public website', () => {
       await expect(page.locator('h1')).toBeVisible();
       await expect(page.getByRole('banner')).toBeVisible();
       await expect(page.getByRole('contentinfo')).toBeVisible();
+      if (gatedRoutes.has(route)) {
+        // Static export serves the page; client AuthGate sends anonymous users to login.
+        await expect(page).toHaveURL(/\/login\//);
+      }
       expect(errors, `console errors on ${route}`).toEqual([]);
     });
   }
@@ -98,6 +106,30 @@ test.describe('public website', () => {
     await expect(page.getByRole('heading', { name: 'Set a new password' })).toBeVisible();
     await expect(page.getByTestId('reset-missing')).toBeVisible();
     await expect(page.getByRole('link', { name: /new reset link/i })).toBeVisible();
+  });
+
+  test('auth chrome hides marketing sidebar on login', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto('/login/');
+    await expect(page.getByTestId('auth-chrome')).toBeVisible();
+    await expect(page.getByTestId('site-sidebar')).toHaveCount(0);
+  });
+
+  test('dashboard and account gate anonymous users to login', async ({ page }) => {
+    await page.goto('/dashboard/');
+    await expect(page).toHaveURL(/\/login\//);
+    await expect(page).toHaveURL(/next=/);
+    await expect(page.getByRole('heading', { name: 'Sign in' })).toBeVisible();
+    await page.goto('/account/');
+    await expect(page).toHaveURL(/\/login\//);
+    await expect(page).toHaveURL(/next=/);
+  });
+
+  test('onboarding page is client-gated like dashboard', async ({ page }) => {
+    await page.goto('/onboarding/');
+    await expect(page).toHaveURL(/\/login\//);
+    await expect(page).toHaveURL(/next=/);
+    await expect(page.getByTestId('auth-chrome')).toBeVisible();
   });
 
   test('privacy and terms mention live website authentication', async ({ page }) => {

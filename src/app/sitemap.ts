@@ -16,9 +16,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/forgot-password/',
     '/reset-password/',
     '/account/',
+    '/dashboard/',
+    '/onboarding/',
   ];
   const paths = new Set<string>([...nav.map((n) => n.href), ...docsIndex.map((d) => d.href), ...extra]);
-  const lastModified = new Date('2026-09-21');
+  const lastModified = new Date('2026-10-02');
   return [...paths].map((path) => ({
     url: new URL(path, site.url).toString(),
     lastModified,

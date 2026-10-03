@@ -44,7 +44,7 @@ export function getAuthCallbackUrl(): string {
   return `${siteUrl.replace(/\/$/, '')}/auth/callback/`;
 }
 
-export function getAuthRedirectUrl(path = '/account/'): string {
+export function getAuthRedirectUrl(path = '/auth/callback/'): string {
   if (typeof window !== 'undefined') {
     return `${window.location.origin}${path.startsWith('/') ? path : `/${path}`}`;
   }
