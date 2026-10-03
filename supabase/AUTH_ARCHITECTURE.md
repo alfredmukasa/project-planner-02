@@ -14,7 +14,7 @@
 | Onboarding mutations | `src/lib/auth/onboarding.ts` (complete / skip on `user_onboarding`) |
 | Chrome modes | `src/components/site/root-chrome.tsx` (marketing / auth / app) |
 | Client AuthGate | `src/components/auth/auth-gate.tsx` (static export — no middleware) |
-| App shell nav | `src/components/app/app-shell.tsx` — Dashboard + Account only |
+| App shell nav | `src/components/app/app-shell.tsx` — Dashboard, Projects, Account |
 | Email/password + forgot UI | `src/components/auth/auth-form.tsx` |
 | OAuth buttons | `src/components/auth/oauth-buttons.tsx` |
 | Reset completion | `src/components/auth/reset-password-form.tsx`, `/reset-password/` |
@@ -103,4 +103,4 @@ Never put service-role or OAuth client secrets in `NEXT_PUBLIC_*`.
 
 ## Explicitly not implemented (later phases)
 
-Project UI, AI agents, billing, desktop app, team-workspace behavior, device session inventory.
+Requirements editor, AI agents, billing, desktop app, team-workspace behavior, device session inventory. Project list, create, and detail shipped in Phase 3.1.
