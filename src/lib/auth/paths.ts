@@ -1,6 +1,13 @@
 /** Route helpers for authenticated product chrome (static export, client-gated). */
 
-export const APP_ROUTES = ['/dashboard/', '/account/', '/onboarding/'] as const;
+export const APP_ROUTES = [
+  '/dashboard/',
+  '/account/',
+  '/onboarding/',
+  '/projects/',
+  '/projects/new/',
+  '/projects/open/',
+] as const;
 export const AUTH_ROUTES = [
   '/login/',
   '/register/',

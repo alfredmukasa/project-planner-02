@@ -30,10 +30,20 @@ const routes = [
   '/account/',
   '/dashboard/',
   '/onboarding/',
+  '/projects/',
+  '/projects/new/',
+  '/projects/open/',
   '/auth/callback/',
 ];
 
-const gatedRoutes = new Set(['/account/', '/dashboard/', '/onboarding/']);
+const gatedRoutes = new Set([
+  '/account/',
+  '/dashboard/',
+  '/onboarding/',
+  '/projects/',
+  '/projects/new/',
+  '/projects/open/',
+]);
 
 async function collectConsoleErrors(page: Page): Promise<string[]> {
   const errors: string[] = [];

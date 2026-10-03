@@ -1,10 +1,10 @@
 'use client';
 
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 import { AuthGate } from '@/components/auth/auth-gate';
-import { ButtonLink, Callout } from '@/components/ui/primitives';
+import { ProjectPanel } from '@/components/projects/project-panel';
+import { ButtonLink } from '@/components/ui/primitives';
 import { createBrowserSupabaseClient } from '@/lib/supabase/client';
 import type { User } from '@supabase/supabase-js';
 
@@ -63,27 +63,7 @@ function DashboardBody({ user }: { user: User }) {
           </p>
         ) : null}
 
-        <section className="mt-8" data-testid="dashboard-projects-empty">
-          <div className="flex items-baseline justify-between gap-3">
-            <h2 className="text-base font-semibold text-text">Projects</h2>
-          </div>
-          <div className="mt-3 rounded-lg border border-border bg-surface p-5">
-            <p className="text-sm font-medium text-text">No projects yet</p>
-            <p className="mt-1.5 text-sm text-text-muted">
-              Project workspaces are not available in this phase. This empty state is intentional — there are
-              no demo or placeholder projects.
-            </p>
-            <Callout tone="neutral" className="mt-4" title="What you can do now">
-              <p>
-                Manage your profile on{' '}
-                <Link href="/account/" className="font-medium text-accent hover:underline">
-                  Account
-                </Link>
-                . Planning projects, agents, and billing arrive in later phases.
-              </p>
-            </Callout>
-          </div>
-        </section>
+        <ProjectPanel />
 
         <div className="mt-6 flex flex-wrap gap-3">
           <ButtonLink href="/account/" variant="secondary">

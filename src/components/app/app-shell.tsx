@@ -1,6 +1,6 @@
 'use client';
 
-import { LayoutDashboard, LogOut, UserRound } from 'lucide-react';
+import { Folder, LayoutDashboard, LogOut, UserRound } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState, type ReactNode } from 'react';
@@ -11,11 +11,13 @@ import { createBrowserSupabaseClient } from '@/lib/supabase/client';
 
 const appNav = [
   { href: '/dashboard/', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/projects/', label: 'Projects', icon: Folder },
   { href: '/account/', label: 'Account', icon: UserRound },
 ] as const;
 
 function isActive(pathname: string, href: string): boolean {
   const path = pathname.endsWith('/') ? pathname : `${pathname}/`;
+  if (href === '/projects/') return path.startsWith('/projects/');
   return path === href;
 }
 
@@ -57,8 +59,13 @@ export function AppShell({ children }: { children: ReactNode }) {
     <div className="flex min-h-screen flex-col bg-bg text-text" data-testid="app-shell">
       <header className="sticky top-0 z-[90] border-b border-border bg-bg">
         <div className="flex h-12 items-center gap-3 px-3 sm:px-5">
-          <Logo />
-          <nav aria-label="Workspace" className="ml-2 flex items-center gap-0.5">
+          <span className="sm:hidden">
+            <Logo compact />
+          </span>
+          <span className="hidden sm:contents">
+            <Logo />
+          </span>
+          <nav aria-label="Workspace" className="ml-1 flex min-w-0 items-center gap-0.5 overflow-x-auto sm:ml-2">
             {appNav.map(({ href, label: itemLabel, icon: Icon }) => {
               const active = isActive(pathname, href);
               return (
@@ -66,12 +73,12 @@ export function AppShell({ children }: { children: ReactNode }) {
                   key={href}
                   href={href}
                   aria-current={active ? 'page' : undefined}
-                  className={`inline-flex h-8 items-center gap-1.5 rounded-md px-2.5 text-sm font-medium transition-colors ${
+                  className={`inline-flex h-8 shrink-0 items-center gap-1.5 rounded-md px-2.5 text-sm font-medium transition-colors ${
                     active ? 'bg-surface-2 text-text' : 'text-text-muted hover:bg-surface-2 hover:text-text'
                   }`}
                 >
                   <Icon size={14} aria-hidden />
-                  {itemLabel}
+                  <span className="sr-only sm:not-sr-only">{itemLabel}</span>
                 </Link>
               );
             })}
@@ -90,7 +97,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               data-testid="app-shell-sign-out"
             >
               <LogOut size={14} aria-hidden />
-              Sign out
+              <span className="sr-only sm:not-sr-only">Sign out</span>
             </button>
           </div>
         </div>

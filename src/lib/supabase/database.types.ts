@@ -156,6 +156,183 @@ export type Database = {
         };
         Relationships: [];
       };
+      workspaces: {
+        Row: {
+          id: string;
+          owner_id: string;
+          name: string;
+          slug: string;
+          kind: 'personal' | 'team' | 'organization';
+          settings: Json;
+          created_at: string;
+          updated_at: string;
+          archived_at: string | null;
+          deleted_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          owner_id: string;
+          name: string;
+          slug: string;
+          kind?: 'personal' | 'team' | 'organization';
+          settings?: Json;
+          created_at?: string;
+          updated_at?: string;
+          archived_at?: string | null;
+          deleted_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          owner_id?: string;
+          name?: string;
+          slug?: string;
+          kind?: 'personal' | 'team' | 'organization';
+          settings?: Json;
+          created_at?: string;
+          updated_at?: string;
+          archived_at?: string | null;
+          deleted_at?: string | null;
+        };
+        Relationships: [];
+      };
+      workspace_members: {
+        Row: {
+          id: string;
+          workspace_id: string;
+          user_id: string;
+          role: 'owner' | 'admin' | 'member' | 'viewer';
+          invited_by: string | null;
+          status: 'invited' | 'active' | 'removed';
+          joined_at: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          workspace_id: string;
+          user_id: string;
+          role: 'owner' | 'admin' | 'member' | 'viewer';
+          invited_by?: string | null;
+          status?: 'invited' | 'active' | 'removed';
+          joined_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          workspace_id?: string;
+          user_id?: string;
+          role?: 'owner' | 'admin' | 'member' | 'viewer';
+          invited_by?: string | null;
+          status?: 'invited' | 'active' | 'removed';
+          joined_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      projects: {
+        Row: {
+          id: string;
+          workspace_id: string;
+          created_by: string;
+          name: string;
+          slug: string;
+          description: string | null;
+          status:
+            | 'draft'
+            | 'planning'
+            | 'plan_approved'
+            | 'in_development'
+            | 'completed'
+            | 'archived';
+          visibility: 'private' | 'workspace';
+          settings: Json;
+          metadata: Json;
+          last_activity_at: string;
+          created_at: string;
+          updated_at: string;
+          archived_at: string | null;
+          deleted_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          workspace_id: string;
+          created_by: string;
+          name: string;
+          slug: string;
+          description?: string | null;
+          status?:
+            | 'draft'
+            | 'planning'
+            | 'plan_approved'
+            | 'in_development'
+            | 'completed'
+            | 'archived';
+          visibility?: 'private' | 'workspace';
+          settings?: Json;
+          metadata?: Json;
+          last_activity_at?: string;
+          created_at?: string;
+          updated_at?: string;
+          archived_at?: string | null;
+          deleted_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          workspace_id?: string;
+          created_by?: string;
+          name?: string;
+          slug?: string;
+          description?: string | null;
+          status?:
+            | 'draft'
+            | 'planning'
+            | 'plan_approved'
+            | 'in_development'
+            | 'completed'
+            | 'archived';
+          visibility?: 'private' | 'workspace';
+          settings?: Json;
+          metadata?: Json;
+          last_activity_at?: string;
+          created_at?: string;
+          updated_at?: string;
+          archived_at?: string | null;
+          deleted_at?: string | null;
+        };
+        Relationships: [];
+      };
+      project_members: {
+        Row: {
+          id: string;
+          project_id: string;
+          user_id: string;
+          role: 'owner' | 'editor' | 'viewer';
+          added_by: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          project_id: string;
+          user_id: string;
+          role: 'owner' | 'editor' | 'viewer';
+          added_by?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          project_id?: string;
+          user_id?: string;
+          role?: 'owner' | 'editor' | 'viewer';
+          added_by?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: {
       user_auth_identities_public: {

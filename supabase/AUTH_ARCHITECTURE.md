@@ -97,6 +97,10 @@ https://shbumfpebjfxzvehwrec.supabase.co/auth/v1/callback
 
 Never put service-role or OAuth client secrets in `NEXT_PUBLIC_*`.
 
-## Explicitly not implemented (Phase 3+)
+## Project tables (Phase 3.0)
 
-Projects product, AI agents, billing, desktop app, teams/workspaces, device session inventory.
+`workspaces`, `workspace_members`, `projects`, and `project_members` exist in the live database with RLS. The website does not query them. There is no project UI, no dashboard project list or create flow, and the auth signup trigger does not create a personal workspace. Phase 1–2 sign-in, onboarding, and account behavior are unchanged.
+
+## Explicitly not implemented (later phases)
+
+Project UI, AI agents, billing, desktop app, team-workspace behavior, device session inventory.
