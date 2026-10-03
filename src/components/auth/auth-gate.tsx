@@ -19,6 +19,14 @@ function hardRedirect(path: string) {
   window.location.replace(path);
 }
 
+/** Path to restore after sign-in, including a project id query when present. */
+function returnPath(pathname: string): string {
+  const path = pathname.endsWith('/') ? pathname : `${pathname}/`;
+  const search = window.location.search;
+  if (!search || search === '?') return path;
+  return `${path}${search}`;
+}
+
 /**
  * Client route gate for the static export.
  * Middleware/proxy is unsupported with `output: 'export'`; this gate runs after hydrate.
@@ -55,7 +63,7 @@ export function AuthGate({
 
         if (missingSession) {
           setState({ status: 'anonymous' });
-          const next = pathname.endsWith('/') ? pathname : `${pathname}/`;
+          const next = returnPath(pathname);
           hardRedirect(`/login/?next=${encodeURIComponent(next)}`);
           return;
         }
@@ -121,7 +129,7 @@ export function AuthGate({
       if (!session?.user) {
         readyRef.current = false;
         setState({ status: 'anonymous' });
-        const next = pathname.endsWith('/') ? pathname : `${pathname}/`;
+        const next = returnPath(pathname);
         hardRedirect(`/login/?next=${encodeURIComponent(next)}`);
       }
     });

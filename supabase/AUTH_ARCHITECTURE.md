@@ -2,7 +2,7 @@
 
 **Phase:** 2 — Authenticated Product Foundation  
 **Date:** 2026-10-02  
-**Scope:** Website only (static Next.js export + Supabase Auth). Not desktop, billing, projects, or agents.
+**Scope:** Website only (static Next.js export + Supabase Auth). Not desktop, billing, or agents. Project create, list, and detail are Phase 3.1.
 
 ## Components
 
@@ -99,7 +99,7 @@ Never put service-role or OAuth client secrets in `NEXT_PUBLIC_*`.
 
 ## Project tables (Phase 3.0)
 
-`workspaces`, `workspace_members`, `projects`, and `project_members` exist in the live database with RLS. The website does not query them. There is no project UI, no dashboard project list or create flow, and the auth signup trigger does not create a personal workspace. Phase 1–2 sign-in, onboarding, and account behavior are unchanged.
+`workspaces`, `workspace_members`, `projects`, and `project_members` exist in the live database with RLS. Phase 3.1 reads and creates personal workspaces and projects from the browser client (`src/lib/projects/access.ts`). The signup trigger still does not create a workspace. The first project create inserts the personal workspace; owner membership stays trigger-maintained. Phase 1–2 sign-in, onboarding, and account behavior are unchanged.
 
 ## Explicitly not implemented (later phases)
 
