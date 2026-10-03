@@ -26,6 +26,8 @@ const routes = [
   '/login/',
   '/register/',
   '/forgot-password/',
+  '/account/',
+  '/auth/callback/',
 ];
 
 async function collectConsoleErrors(page: Page): Promise<string[]> {
@@ -73,12 +75,21 @@ test.describe('public website', () => {
     await expect(page.getByTestId('download-card')).toContainText('Not yet published');
   });
 
-  test('login preview does not authenticate', async ({ page }) => {
+  test('login shows OAuth providers and surfaces auth errors', async ({ page }) => {
     await page.goto('/login/');
+    await expect(page.getByTestId('oauth-buttons')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Continue with Google' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Continue with GitHub' })).toBeVisible();
     await page.getByRole('textbox', { name: 'Email' }).fill('preview@example.com');
     await page.getByLabel('Password').fill('not-a-real-password');
     await page.getByRole('button', { name: 'Sign in' }).click();
-    await expect(page.getByTestId('auth-preview-notice')).toContainText('Accounts are not available yet');
+    await expect(page.getByTestId('auth-error')).toBeVisible();
+  });
+
+  test('register shows OAuth providers', async ({ page }) => {
+    await page.goto('/register/');
+    await expect(page.getByRole('button', { name: 'Continue with Google' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Continue with GitHub' })).toBeVisible();
   });
 
   test('feedback form is preview-only', async ({ page }) => {

@@ -5,15 +5,16 @@ import { AuthForm, Field } from '@/components/auth/auth-form';
 
 export const metadata: Metadata = {
   title: 'Forgot password',
-  description: 'Reset a Project Planner password. Password reset is not available during the website preview.',
+  description: 'Reset your Project Planner password.',
 };
 
 export default function ForgotPasswordPage() {
   return (
     <div className="container-x py-16 md:py-24">
       <AuthForm
+        mode="forgot"
         title="Reset password"
-        description="Preview of the planned reset flow. Submitting does not send email or change any password."
+        description="Enter the email for your account and we will send a reset link if it exists."
         submitLabel="Send reset link"
         footer={
           <>

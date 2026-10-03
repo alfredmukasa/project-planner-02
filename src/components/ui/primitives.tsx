@@ -61,6 +61,7 @@ export function Button({
   disabled = false,
   type = 'button',
   ariaDescribedBy,
+  onClick,
 }: {
   children: ReactNode;
   variant?: Variant;
@@ -69,12 +70,14 @@ export function Button({
   disabled?: boolean;
   type?: 'button' | 'submit';
   ariaDescribedBy?: string;
+  onClick?: () => void;
 }) {
   return (
     <button
       type={type}
       disabled={disabled}
       aria-describedby={ariaDescribedBy}
+      onClick={onClick}
       className={`inline-flex items-center justify-center gap-1.5 rounded-md font-medium transition-colors disabled:cursor-not-allowed disabled:bg-surface-2 disabled:text-text-muted disabled:border-border disabled:hover:bg-surface-2 ${variantClass[variant]} ${sizeClass[size]} ${className}`}
     >
       {children}

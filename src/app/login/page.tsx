@@ -5,15 +5,16 @@ import { AuthForm, Field } from '@/components/auth/auth-form';
 
 export const metadata: Metadata = {
   title: 'Login',
-  description: 'Sign in to Project Planner. Account authentication is not available during the website preview.',
+  description: 'Sign in to Project Planner with email, Google, or GitHub.',
 };
 
 export default function LoginPage() {
   return (
     <div className="container-x py-16 md:py-24">
       <AuthForm
+        mode="login"
         title="Sign in"
-        description="This is a preview of the planned login screen. Submitting the form does not authenticate you and does not send your email or password anywhere."
+        description="Use Google, GitHub, or your email and password to access your Project Planner account."
         submitLabel="Sign in"
         footer={
           <>
