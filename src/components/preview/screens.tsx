@@ -29,8 +29,8 @@ import { GraphSvg } from './graph-svg';
 export function OverviewPreview({ compact = false }: { compact?: boolean }) {
   return (
     <AppFrame active="Overview" title="Overview" compact={compact} groups={['Workspace', 'Architecture', 'AI', 'Development']}>
-      <div className="grid gap-3 lg:grid-cols-[1.2fr_1fr]">
-        <div className="space-y-3">
+      <div className="grid min-w-0 grid-cols-1 gap-3 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
+        <div className="min-w-0 space-y-3">
           <div className="rounded-md border border-border p-3">
             <div className="flex items-start gap-3">
               <div className="min-w-0">
@@ -57,7 +57,7 @@ export function OverviewPreview({ compact = false }: { compact?: boolean }) {
             <p className="mb-2 text-2xs font-semibold uppercase tracking-wide text-text-faint">Progress</p>
             <div className="space-y-1.5">
               {progress.slice(0, compact ? 4 : 7).map((p) => (
-                <div key={p.label} className="grid grid-cols-[88px_1fr] items-center gap-2">
+                <div key={p.label} className="grid grid-cols-[88px_minmax(0,1fr)] items-center gap-2">
                   <span className="text-text-muted">{p.label}</span>
                   <ProgressBar value={p.value} label={p.label} />
                 </div>
@@ -65,7 +65,7 @@ export function OverviewPreview({ compact = false }: { compact?: boolean }) {
             </div>
           </div>
           {!compact && (
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid min-w-0 grid-cols-2 gap-2 @min-[520px]:grid-cols-4">
               {metrics.map((m) => (
                 <div key={m.label} className="rounded-md border border-border px-2 py-1.5">
                   <p className="text-sm font-semibold tabular-nums">{m.value}</p>
@@ -75,15 +75,17 @@ export function OverviewPreview({ compact = false }: { compact?: boolean }) {
             </div>
           )}
         </div>
-        <div className="space-y-3">
+        <div className="min-w-0 space-y-3">
           <div className="rounded-md border border-border p-3">
             <p className="mb-2 text-2xs font-semibold uppercase tracking-wide text-text-faint">Health</p>
             <ul className="space-y-1.5">
               {health.slice(0, compact ? 4 : 7).map((h) => (
-                <li key={h.label} className="flex items-center gap-2">
-                  <DemoStatus value={h.state} />
-                  <span className="truncate text-text">{h.label}</span>
-                  <span className="ml-auto truncate text-text-faint">{h.detail}</span>
+                <li key={h.label} className="flex min-w-0 items-center gap-2">
+                  <span className="shrink-0">
+                    <DemoStatus value={h.state} />
+                  </span>
+                  <span className="min-w-0 truncate text-text">{h.label}</span>
+                  <span className="ml-auto min-w-0 truncate text-text-faint">{h.detail}</span>
                 </li>
               ))}
             </ul>
@@ -255,7 +257,7 @@ export function AgentsPreview({ compact = false }: { compact?: boolean }) {
         </>
       }
     >
-      <div className="mb-3 grid grid-cols-4 gap-2">
+      <div className="mb-3 grid min-w-0 grid-cols-2 gap-2 @min-[480px]:grid-cols-4">
         {(
           [
             ['Running', counts.running, 'running'],
@@ -466,7 +468,7 @@ export function AuditPreview({ compact = false }: { compact?: boolean }) {
         </>
       }
     >
-      <div className="mb-3 grid grid-cols-5 gap-2">
+      <div className="mb-3 grid min-w-0 grid-cols-2 gap-2 @min-[560px]:grid-cols-5">
         {(['critical', 'high', 'medium', 'low', 'resolved'] as const).map((s) => (
           <div key={s} className="rounded-md border border-border px-2 py-1.5">
             <p className="text-sm font-semibold tabular-nums">{s === 'resolved' ? auditItems.filter((a) => a.status === 'resolved').length : open.filter((a) => a.severity === s).length}</p>
@@ -503,7 +505,7 @@ export function BlueprintPreview({ compact = false }: { compact?: boolean }) {
   const sections = ['Purpose', 'Requirements', 'Architecture', 'Data Flow', 'AI', 'Development', 'Testing', 'Security', 'Deployment', 'Documentation'];
   return (
     <AppFrame active="Blueprint" title="Blueprint" compact={compact} groups={['Workspace', 'Documentation', 'Quality']}>
-      <div className="grid gap-3 md:grid-cols-[170px_1fr]">
+      <div className="grid min-w-0 gap-3 @min-[560px]:grid-cols-[170px_minmax(0,1fr)]">
         <ol className="rounded-md border border-border bg-bg-subtle p-2 text-text-muted">
           {sections.map((s, i) => (
             <li key={s} className={`flex items-center gap-2 rounded-sm px-2 py-[3px] ${i === 2 ? 'bg-surface-3 font-medium text-text' : ''}`}>
@@ -512,8 +514,8 @@ export function BlueprintPreview({ compact = false }: { compact?: boolean }) {
             </li>
           ))}
         </ol>
-        <article className="rounded-md border border-border p-3">
-          <div className="flex items-center gap-2 text-2xs text-text-faint">
+        <article className="min-w-0 rounded-md border border-border p-3">
+          <div className="flex min-w-0 flex-wrap items-center gap-2 text-2xs text-text-faint">
             <span>ART-008 · Blueprint v6</span>
             <span>·</span>
             <span>generated from project data {demoProject.updated}</span>

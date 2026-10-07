@@ -18,7 +18,7 @@ export function ProgressBar({ value, label }: { value: number | null; label: str
   const pct = Math.round(value * 100);
   return (
     <div className="flex items-center gap-2">
-      <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-surface-3" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label={label}>
+      <div className="h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-surface-3" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label={label}>
         <div className="h-full rounded-full bg-accent" style={{ width: `${pct}%` }} />
       </div>
       <span className="w-20 text-right text-2xs tabular-nums text-text-muted">{pct}%</span>

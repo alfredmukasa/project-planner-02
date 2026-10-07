@@ -90,18 +90,25 @@ export default function HomePage() {
       <Section muted id="previews">
         <SectionHeading eyebrow="Interface preview" title="The workspace, screen by screen" description="Each preview is rendered from a single demo project so the screens stay consistent with each other. Layout, density and behaviour reflect the planned Windows application." />
         <div className="mt-10 space-y-14">
-          {previews.map((p, i) => (
-            <div key={p.key} className={`grid items-start gap-6 lg:grid-cols-[280px_1fr] ${i % 2 === 1 ? 'lg:[&>*:first-child]:order-2' : ''}`}>
-              <div className="lg:sticky lg:top-20">
+          {previews.map((p, i) => {
+            const copy = (
+              <div className="min-w-0 lg:sticky lg:top-20">
                 <h3 className="text-lg font-semibold tracking-tight">{p.title}</h3>
                 <p className="mt-2 text-sm text-text-muted">{p.blurb}</p>
                 <Link href={p.href} className="mt-3 inline-block text-sm font-medium text-accent hover:underline">
                   Learn more →
                 </Link>
               </div>
-              <div className="min-w-0">{p.element}</div>
-            </div>
-          ))}
+            );
+            const visual = <div className="min-w-0 w-full max-w-full">{p.element}</div>;
+            const flipped = i % 2 === 1;
+            return (
+              <div key={p.key} className={`grid items-start gap-6 ${flipped ? 'lg:grid-cols-[minmax(0,1fr)_280px]' : 'lg:grid-cols-[280px_minmax(0,1fr)]'}`}>
+                {flipped ? visual : copy}
+                {flipped ? copy : visual}
+              </div>
+            );
+          })}
         </div>
       </Section>
 

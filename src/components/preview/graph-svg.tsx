@@ -58,8 +58,8 @@ export function GraphSvg({ nodes, edges, selectedId, direction = 'LR', ariaLabel
   const height = laid.height + PAD * 2;
 
   return (
-    <div className="rounded-md border border-border bg-bg">
-      <div className="flex items-center gap-1 border-b border-border px-2 py-1 text-text-muted" aria-hidden>
+    <div className="min-w-0 max-w-full rounded-md border border-border bg-bg">
+      <div className="flex min-w-0 items-center gap-1 overflow-hidden border-b border-border px-2 py-1 text-text-muted" aria-hidden>
         {[Maximize2, Plus, Minus].map((Icon, i) => (
           <span key={i} className="inline-flex h-5 w-5 items-center justify-center rounded-sm border border-border bg-surface">
             <Icon size={10} />
@@ -75,7 +75,7 @@ export function GraphSvg({ nodes, edges, selectedId, direction = 'LR', ariaLabel
           <Download size={9} /> Export
         </span>
       </div>
-      <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={ariaLabel} className="block w-full h-auto" style={{ maxHeight: 460 }}>
+      <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={ariaLabel} className="block h-auto w-full max-w-full" style={{ maxHeight: 460 }}>
         <defs>
           <marker id="pp-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
             <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--border-strong)" />
