@@ -6,9 +6,9 @@ import { PreviewLabel } from '@/components/ui/primitives';
 
 /** Sidebar structure of the planned desktop application. */
 export const sidebarGroups = [
-  { title: 'Workspace', items: ['Overview', 'Project', 'Plan', 'Requirements', 'Milestones', 'Tasks'] },
+  { title: 'Workspace', items: ['Overview', 'Agents', 'Project', 'Plan', 'Requirements', 'Milestones', 'Tasks'] },
   { title: 'Architecture', items: ['Architecture', 'System Map', 'Data Flow', 'Dependencies', 'Integrations', 'Database', 'APIs'] },
-  { title: 'AI', items: ['Agents', 'Agent Groups', 'MCP', 'Skills', 'Memory', 'AI Providers', 'Agent Activity'] },
+  { title: 'AI', items: ['Agent Groups', 'MCP', 'Skills', 'Memory', 'AI Providers', 'Agent Activity'] },
   { title: 'Development', items: ['Files', 'Terminal', 'Git', 'Environment', 'Testing', 'Builds'] },
   { title: 'Documentation', items: ['Documentation', 'Blueprint', 'Decisions', 'Change Log', 'Export'] },
   { title: 'Quality', items: ['Audit', 'Security', 'Accessibility', 'Compliance', 'Cost Analysis'] },
