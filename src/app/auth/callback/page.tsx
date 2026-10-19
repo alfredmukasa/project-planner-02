@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { resolvePostAuthPath } from '@/lib/auth/post-auth';
+import { isSafeNextPath } from '@/lib/auth/paths';
 import { friendlyAuthError } from '@/lib/supabase/auth-errors';
 import { createBrowserSupabaseClient } from '@/lib/supabase/client';
 
@@ -49,6 +50,10 @@ export default function AuthCallbackPage() {
         const goNext = async () => {
           if (isRecovery) {
             router.replace('/reset-password/');
+            return;
+          }
+          if (isSafeNextPath(nextRaw)) {
+            router.replace(nextRaw);
             return;
           }
           router.replace(await resolvePostAuthPath(supabase));

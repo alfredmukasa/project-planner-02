@@ -1,3 +1,5 @@
+import { isSafeNextPath } from '@/lib/auth/paths';
+
 /** Public Supabase env used by the static website client. */
 
 export function getSupabaseUrl(): string {
@@ -36,18 +38,22 @@ function looksLikeJwt(value: string): boolean {
   return value.startsWith('eyJ') && value.split('.').length === 3;
 }
 
-export function getAuthCallbackUrl(): string {
+export function getAuthCallbackUrl(nextPath?: string): string {
+  const callbackPath = '/auth/callback/';
+  const nextQuery = isSafeNextPath(nextPath) ? `?next=${encodeURIComponent(nextPath)}` : '';
   if (typeof window !== 'undefined') {
-    return `${window.location.origin}/auth/callback/`;
+    return `${window.location.origin}${callbackPath}${nextQuery}`;
   }
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
-  return `${siteUrl.replace(/\/$/, '')}/auth/callback/`;
+  return `${siteUrl.replace(/\/$/, '')}${callbackPath}${nextQuery}`;
 }
 
-export function getAuthRedirectUrl(path = '/auth/callback/'): string {
+export function getAuthRedirectUrl(path = '/auth/callback/', nextPath?: string): string {
+  const safePath = path.startsWith('/') ? path : `/${path}`;
+  const nextQuery = isSafeNextPath(nextPath) ? `?next=${encodeURIComponent(nextPath)}` : '';
   if (typeof window !== 'undefined') {
-    return `${window.location.origin}${path.startsWith('/') ? path : `/${path}`}`;
+    return `${window.location.origin}${safePath}${nextQuery}`;
   }
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
-  return `${siteUrl.replace(/\/$/, '')}${path.startsWith('/') ? path : `/${path}`}`;
+  return `${siteUrl.replace(/\/$/, '')}${safePath}${nextQuery}`;
 }
