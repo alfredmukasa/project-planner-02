@@ -53,9 +53,11 @@ const providers = [
 export function OAuthButtons({
   disabled = false,
   onError,
+  nextPath,
 }: {
   disabled?: boolean;
   onError?: (message: string) => void;
+  nextPath?: string;
 }) {
   const [busyProvider, setBusyProvider] = useState<'google' | 'github' | null>(null);
 
@@ -67,7 +69,7 @@ export function OAuthButtons({
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
-          redirectTo: getAuthCallbackUrl(),
+          redirectTo: getAuthCallbackUrl(nextPath),
           queryParams:
             provider === 'google'
               ? {

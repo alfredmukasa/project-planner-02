@@ -98,6 +98,7 @@ function AuthFormInner({
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
   const resetNotice = mode === 'login' && searchParams.get('reset') === '1';
+  const nextParam = searchParams.get('next');
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -119,7 +120,6 @@ function AuthFormInner({
           setError(friendlyAuthError(signInError));
           return;
         }
-        const nextParam = searchParams.get('next');
         if (isSafeNextPath(nextParam)) {
           router.push(nextParam);
           return;
@@ -141,7 +141,10 @@ function AuthFormInner({
               display_name: name || undefined,
               full_name: name || undefined,
             },
-            emailRedirectTo: getAuthRedirectUrl('/auth/callback/'),
+            emailRedirectTo: getAuthRedirectUrl(
+              '/auth/callback/',
+              isSafeNextPath(nextParam) ? nextParam : undefined,
+            ),
           },
         });
         if (signUpError) {
@@ -154,7 +157,7 @@ function AuthFormInner({
           );
           return;
         }
-        router.push(await resolvePostAuthPath(supabase));
+        router.push(isSafeNextPath(nextParam) ? nextParam : await resolvePostAuthPath(supabase));
         return;
       }
 
@@ -190,6 +193,7 @@ function AuthFormInner({
           <div className="mt-4 space-y-3">
             <OAuthButtons
               disabled={busy}
+              nextPath={isSafeNextPath(nextParam) ? nextParam : undefined}
               onError={(message) => {
                 setError(message ? message : null);
               }}
