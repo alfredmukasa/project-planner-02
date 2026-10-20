@@ -77,9 +77,14 @@ http://localhost:3000/reset-password/
 http://localhost:3000/account/
 http://localhost:3000/dashboard/
 http://localhost:3000/onboarding/
+https://alra-pro.dev/auth/callback/
+https://alra-pro.dev/reset-password/
+https://alra-pro.dev/account/
+https://alra-pro.dev/dashboard/
+https://alra-pro.dev/onboarding/
 ```
 
-Plus the same paths for each Vercel preview/production origin.  
+Add the same paths for any Vercel preview origin used for auth testing.
 Provider apps (Google/GitHub) use only:
 
 ```text

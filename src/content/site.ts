@@ -5,7 +5,7 @@ export const site = {
   tagline: 'Plan before you build.',
   description:
     'Project Planner is an upcoming AI-powered planning workspace for Windows that connects requirements, architecture, AI agents, development planning, testing and documentation in one place.',
-  url: 'https://projectplanner.app',
+  url: 'https://alra-pro.dev',
   supportEmail: 'support@projectplanner.app',
   feedbackEmail: 'feedback@projectplanner.app',
   privacyEmail: 'privacy@projectplanner.app',

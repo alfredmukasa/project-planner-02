@@ -46,7 +46,7 @@ See `supabase/OAUTH_SETUP.md` and `.env.local` (gitignored):
 
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY` (prefer JWT anon key)
-- `NEXT_PUBLIC_SITE_URL` (e.g. `http://localhost:3000` or your deployment origin)
+- `NEXT_PUBLIC_SITE_URL` (e.g. `http://localhost:3000` or `https://alra-pro.dev` in production)
 
 Never commit service-role keys or OAuth client secrets.
 
